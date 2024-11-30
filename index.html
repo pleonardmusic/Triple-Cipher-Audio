@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Audio Synthesizer</title>
+    <script src="https://cdn.jsdelivr.net/npm/wav-encoder@1.1.0/dist/wav-encoder.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css">
+
+  </head>
+
+  <body>
+    <div class="intro">
+    <h3>DESCRIPTION</h3>    
+    <p>This web application takes an audio file as input.  After the file is processed using a custom algorithm, the program generates three specially coded 
+        white noise files, which when played together regenerate the original sound file.  It has potential for real-time audio encryption, but also has
+        applications for music and art.</p>
+    </div>    
+    <div class="container">
+      <div class="inner-container">
+        <h1 style="text-align: center">Triple Cipher Audio</h1>
+
+        <input type="file" id="fileInput" accept=".mp3, .wav, audio/*" /><br />
+        <button id="playButton">Play</button>
+        <button id="stopButton">Stop</button>
+        <span> Load a .wav or .MP3 file</span>
+
+        <p></p>
+        <p>
+          After loading an audio file <strong>YOU MUST</strong> hit
+          <i>Process Audio</i> below to initialize the function!!
+        </p>
+        <div id="demo"></div>
+
+        <p>
+          <button onclick="processAudioData()">
+            <strong>Process Audio</strong>
+          </button>
+        </p>
+
+        <button onclick="playJ()">Play J</button> Noise Signal 1
+        <button onclick="stopJ()">STOP J</button>
+        <br />
+        <div id="muteAlert" style="display: none; position: fixed; top: 40%; left: 50%; transform: translateX(-50%); padding: 20px; background-color: red; color: white; font-size: 20px; border-radius: 5px;">
+          Unmute Phone
+        </div>
+        <button onclick="playK()">Play K</button> Noise Signal 2
+        <button onclick="stopK()">STOP K</button>
+        <br />
+        <button onclick="playL()">Play L</button> Noise Signal 3
+        <button onclick="stopL()">STOP L</button>
+        <br />
+        <button onclick="playFinalComplexSignal()">PLAY FINAL</button>
+        <button onclick="stopFinal()">STOP Final</button>
+        <p style="text-align: center">
+          FINAL SIGNAL: a combination of J, K, and L
+        </p>
+
+        <p style="text-align: center">
+          <button onclick="saveThreeWavFiles()">
+            <strong>Save All Three Wave Files</strong></button><br />
+          Import the 3 files into a DAW and play with muting, panning and fading
+          them IN / OUT.
+        </p>
+      </div>
+      <!-- end INNER container -->
+    </div>
+    <!-- end container -->
+    <div>
+      <canvas id="waveform-canvas"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+
+  </body>
+</html>
