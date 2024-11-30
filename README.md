@@ -1,2 +1,7 @@
-# Triple Cipher Audio
- Rea-Time Audio Transcription Tool
+**SUMMARY**
+
+This is the basic proof of concept for an original audio encryption application that hides an audio file inside three white noise signals: a tool that could practically be used to send confidential audio data (or other data streams) in the form of multiple substreams. When added together, these recreate the original signal. The encrypted data substreams (random numbers between -1.0 and 1.0) would be sent separately to the intended recipient then reassembled using custom software. Below is a proof of the function, taking an audio file as input (with 44,100 data points per second) which it converts into three random audio signals – these sound like white noise to the listener. When these three are added together by the computer (the equivalent of playing them simultaneously) the original audio signal is reconstructed. The program also allows you to download the audio files, for use in a DAW. There you can experiment with fading in / out individual audio tracks to hear the effect interactively.
+
+**Potential for Deeper Applications
+**
+In working out this algorithm it took many many iterations to create the final version of the code, where each of the three substreams is equally “random” and sounds without any hint of the original signal. Extrapolating on this logic, the litmus test modeled by this alghorithm could be used to test the efficacy of other types of encryption algorithms, by putting them to the test of hiding an audio signal; because your ears immediately tell you how well the data is encrypted!
