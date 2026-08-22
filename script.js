@@ -91,15 +91,13 @@ stopButton.addEventListener("click", function () {
 /// TRIPLE/DOUBLE CIPHER ALGORITHM
 ///
 /// For N tracks: generate (N-1) independent random noise shares per
-/// sample, each in [-1/N, 1/N]. The Nth share is the forced remainder
-/// (orig/N minus the noise shares) that makes the shares sum exactly
-/// to orig/N. Which physical output track holds which share is
-/// re-randomized on every sample, so the "remainder" role (the one
-/// that structurally carries the original's content) doesn't pile up
-/// in a single track.
+/// sample. The Nth share is the forced remainder (orig*0.5 minus the
+/// noise shares) that makes the shares sum exactly to orig*0.5 for any
+/// N. Which physical output track holds which share is re-randomized
+/// on every sample, so the "remainder" role (the one that structurally
+/// carries the original's content) doesn't pile up in a single track.
 
 let tracks = [] // tracks[trackIndex][sampleIndex]
-let finalComplexSignal = []
 
 function getSelectedTrackCount() {
   const checked = document.querySelector('input[name="trackMode"]:checked')
@@ -125,18 +123,24 @@ function processAudioData() {
 
   const numTracks = getSelectedTrackCount()
   const n = dataArray.length
-  const scale = 1 / numTracks
+
+  // orig is always scaled to +/-0.5, regardless of track count, so the
+  // acoustic sum of the physical tracks lands at a consistent orig*0.5
+  // no matter how many tracks are in play. Only the noise shares' range
+  // shrinks as track count grows, to keep every track's samples
+  // guaranteed within [-1, 1]: worst case is 0.5 + (numTracks-1)*noiseRange = 1.0.
+  const origScale = 0.5
+  const noiseRange = numTracks > 1 ? origScale / (numTracks - 1) : 0
 
   tracks = Array.from({ length: numTracks }, () => new Array(n))
-  finalComplexSignal = new Array(n)
 
   for (let i = 0; i < n; i++) {
-    const orig = dataArray[i] * scale
+    const orig = dataArray[i] * origScale
 
     const shares = []
     let sumOfNoiseShares = 0
     for (let s = 0; s < numTracks - 1; s++) {
-      const noise = Math.random() * (2 * scale) - scale // uniform(-scale, scale)
+      const noise = Math.random() * (2 * noiseRange) - noiseRange // uniform(-noiseRange, noiseRange)
       shares.push(noise)
       sumOfNoiseShares += noise
     }
@@ -144,12 +148,9 @@ function processAudioData() {
 
     shuffleInPlace(shares)
 
-    let sum = 0
     for (let t = 0; t < numTracks; t++) {
       tracks[t][i] = shares[t]
-      sum += shares[t]
     }
-    finalComplexSignal[i] = sum * numTracks // undo the 1/numTracks scale-down
   }
 
   document.getElementById("demo").innerHTML =
@@ -239,31 +240,6 @@ function stopAll() {
     try { node.source.stop() } catch (e) {}
   })
   playbackNodes = []
-}
-
-let finalSource = null
-
-function playFinal() {
-  if (finalComplexSignal.length === 0) {
-    document.getElementById("demo").innerHTML =
-      "<strong>Load a file and hit Process Audio first!</strong>"
-    return
-  }
-  if (finalSource) {
-    try { finalSource.stop() } catch (e) {}
-  }
-  maybeWarnMutedPhone()
-  finalSource = audioContext.createBufferSource()
-  finalSource.buffer = floatArrayToBuffer(finalComplexSignal)
-  finalSource.connect(audioContext.destination)
-  finalSource.start()
-}
-
-function stopFinal() {
-  if (finalSource) {
-    try { finalSource.stop() } catch (e) {}
-    finalSource = null
-  }
 }
 
 ////////////////////////////  ////////////////////////////
