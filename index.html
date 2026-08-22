@@ -2,77 +2,89 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Audio Synthesizer</title>
-    <script src="https://cdn.jsdelivr.net/npm/wav-encoder@1.1.0/dist/wav-encoder.min.js"></script>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Triple Cipher Audio</title>
     <link rel="stylesheet" href="app.css">
-
   </head>
 
   <body>
-    <div class="intro">
-    <h3>DESCRIPTION</h3>    
-    <p>This web application takes an audio file as input.  After the file is processed using a custom algorithm, the program generates three specially coded 
-        white noise files, which when played together regenerate the original sound file.  It has potential for real-time audio encryption, but also has
-        applications for music and art.</p>
-    </div>    
-    <div class="container">
-      <div class="inner-container">
-        <h1 style="text-align: center">Triple Cipher Audio</h1>
-
-        <input type="file" id="fileInput" accept=".mp3, .wav, audio/*" /><br />
-        <button id="playButton">Play</button>
-        <button id="stopButton">Stop</button>
-        <span> Load a .wav or .MP3 file</span>
-
-        <p></p>
-        <p>
-          After loading an audio file <strong>YOU MUST</strong> hit
-          <i>Process Audio</i> below to initialize the function!!
-        </p>
-        <div id="demo"></div>
-
-        <p>
-          <button onclick="processAudioData()">
-            <strong>Process Audio</strong>
-          </button>
-        </p>
-
-        <button onclick="playJ()">Play J</button> Noise Signal 1
-        <button onclick="stopJ()">STOP J</button>
-        <br />
-        <div id="muteAlert" style="display: none; position: fixed; top: 40%; left: 50%; transform: translateX(-50%); padding: 20px; background-color: red; color: white; font-size: 20px; border-radius: 5px;">
-          Unmute Phone
+    <div class="app">
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-mark">&#9670;</span>
+          <h1>Triple&nbsp;Cipher&nbsp;Audio</h1>
         </div>
-        <button onclick="playK()">Play K</button> Noise Signal 2
-        <button onclick="stopK()">STOP K</button>
-        <br />
-        <button onclick="playL()">Play L</button> Noise Signal 3
-        <button onclick="stopL()">STOP L</button>
-        <br />
-        <button onclick="playFinalComplexSignal()">PLAY FINAL</button>
-        <button onclick="stopFinal()">STOP Final</button>
-        <p style="text-align: center">
-          FINAL SIGNAL: a combination of J, K, and L
+        <p class="tagline">
+          Splits an audio signal into synchronized noise tracks that
+          reconstruct the original only when played together.
         </p>
+      </header>
 
-        <p style="text-align: center">
-          <button onclick="saveThreeWavFiles()">
-            <strong>Save All Three Wave Files</strong></button><br />
-          Import the 3 files into a DAW and play with muting, panning and fading
-          them IN / OUT.
-        </p>
-      </div>
-      <!-- end INNER container -->
+      <main class="panel">
+        <section class="upload-section">
+          <label class="upload-dropzone" for="fileInput">
+            <input type="file" id="fileInput" accept=".mp3, .wav, audio/*" />
+            <span class="upload-icon">&#9211;</span>
+            <span class="upload-text">Choose an audio file</span>
+            <span class="upload-hint">.wav or .mp3</span>
+          </label>
+          <div class="original-controls">
+            <button id="playButton" class="btn btn-ghost">Play Original</button>
+            <button id="stopButton" class="btn btn-ghost">Stop</button>
+          </div>
+        </section>
+
+        <div id="demo" class="status-line"></div>
+
+        <section class="mode-section">
+          <span class="section-label">Tracks</span>
+          <div class="segmented" role="radiogroup" aria-label="Number of noise tracks">
+            <label class="segmented-option">
+              <input type="radio" name="trackMode" value="2" />
+              <span>2</span>
+            </label>
+            <label class="segmented-option">
+              <input type="radio" name="trackMode" value="3" checked />
+              <span>3</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="waveform-section">
+          <canvas id="waveform-canvas"></canvas>
+        </section>
+
+        <section class="tracks-section">
+          <div class="section-header">
+            <span class="section-label">Mix</span>
+            <div class="playback-controls">
+              <button onclick="playAllSynced()" class="btn btn-primary">Play All (Synced)</button>
+              <button onclick="stopAll()" class="btn btn-ghost">Stop</button>
+            </div>
+          </div>
+          <div id="trackControls" class="track-controls"></div>
+          <p class="hint">
+            Drag a fader to isolate a track or blend it back in — hear the
+            original click into place.
+          </p>
+        </section>
+
+        <section class="export-section">
+          <button onclick="saveAllTracks()" class="btn btn-secondary">Save All Tracks as WAV</button>
+          <p class="hint">
+            Import the tracks into a DAW and experiment with muting,
+            panning, and fading.
+          </p>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        Processing happens locally in your browser — audio never leaves your device.
+      </footer>
     </div>
-    <!-- end container -->
-    <div>
-      <canvas id="waveform-canvas"></canvas>
-    </div>
+
+    <div id="muteAlert" class="mute-alert">Unmute your device</div>
 
     <script src="script.js"></script>
-
   </body>
 </html>
