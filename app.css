@@ -71,6 +71,38 @@ button {
 button:hover {
   background-color: #ff1493; /* Darker pink on hover */
 }
+.mode-select {
+  margin: 15px 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+.mode-select label {
+  margin-right: 20px;
+  font-size: 1em;
+}
+
+.track-controls {
+  margin: 15px 0;
+}
+
+.track-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.track-label {
+  min-width: 70px;
+  font-weight: bold;
+}
+
+.track-fader {
+  flex: 1;
+}
+
 @media (max-width: 550px) {
   .container {
     background-image: none; /* Remove the background image */
