@@ -45,8 +45,7 @@ function loadAudioFile(file) {
       originalBuffer = buffer
       dataArray = Array.from(buffer.getChannelData(0))
       drawWaveform(dataArray)
-      document.getElementById("demo").innerHTML =
-        `Loaded ${dataArray.length.toLocaleString()} samples (${(dataArray.length / buffer.sampleRate).toFixed(1)}s). Now hit <strong>Process Audio</strong>.`
+      processAudioData()
     })
   })
 
@@ -56,6 +55,12 @@ function loadAudioFile(file) {
 fileInput.addEventListener("change", function () {
   const file = this.files[0]
   if (file) loadAudioFile(file)
+})
+
+document.querySelectorAll('input[name="trackMode"]').forEach(function (radio) {
+  radio.addEventListener("change", function () {
+    if (dataArray.length > 0) processAudioData()
+  })
 })
 
 function maybeWarnMutedPhone() {
@@ -173,6 +178,8 @@ function floatArrayToBuffer(arr) {
 
 let playbackNodes = [] // { source, gain }
 
+const TRACK_COLORS = ["#7c5cff", "#22d3ee", "#f472b6", "#34d399", "#fbbf24", "#f87171"]
+
 function buildTrackControls() {
   const container = document.getElementById("trackControls")
   container.innerHTML = ""
@@ -180,6 +187,7 @@ function buildTrackControls() {
   tracks.forEach((_, idx) => {
     const row = document.createElement("div")
     row.className = "track-row"
+    row.style.setProperty("--track-color", TRACK_COLORS[idx % TRACK_COLORS.length])
 
     const label = document.createElement("span")
     label.className = "track-label"
@@ -191,7 +199,9 @@ function buildTrackControls() {
     slider.max = "100"
     slider.value = "100"
     slider.className = "track-fader"
+    slider.style.setProperty("--fill", "100%")
     slider.addEventListener("input", function () {
+      slider.style.setProperty("--fill", slider.value + "%")
       setTrackGain(idx, slider.value / 100)
     })
 
@@ -238,6 +248,7 @@ function playAllSynced() {
 
   document.querySelectorAll(".track-fader").forEach(function (slider) {
     slider.value = 100
+    slider.style.setProperty("--fill", "100%")
   })
 }
 
