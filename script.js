@@ -74,6 +74,9 @@ playButton.addEventListener("click", function () {
     try { originalSource.stop() } catch (e) {}
   }
   maybeWarnMutedPhone()
+  if (audioContext.state === "suspended") {
+    audioContext.resume()
+  }
   originalSource = audioContext.createBufferSource()
   originalSource.buffer = originalBuffer
   originalSource.connect(audioContext.destination)
@@ -213,6 +216,9 @@ function playAllSynced() {
   }
   stopAll()
   maybeWarnMutedPhone()
+  if (audioContext.state === "suspended") {
+    audioContext.resume()
+  }
 
   const startAt = audioContext.currentTime + 0.05
   playbackNodes = tracks.map(function (trackData) {
