@@ -16,7 +16,8 @@
         </div>
         <p class="tagline">
           Splits an audio signal into synchronized noise tracks that
-          reconstruct the original only when played together.
+          reconstruct the original only when played together. Choose
+          track count and sample-rate resolution below.
         </p>
       </header>
 
@@ -34,21 +35,38 @@
           </div>
         </section>
 
-        <div id="demo" class="status-line"></div>
-
         <section class="mode-section">
           <span class="section-label">Tracks</span>
           <div class="segmented" role="radiogroup" aria-label="Number of noise tracks">
             <label class="segmented-option">
-              <input type="radio" name="trackMode" value="2" />
+              <input type="radio" name="trackMode" value="2" checked />
               <span>2</span>
             </label>
             <label class="segmented-option">
-              <input type="radio" name="trackMode" value="3" checked />
+              <input type="radio" name="trackMode" value="3" />
               <span>3</span>
+            </label>
+            <label class="segmented-option">
+              <input type="radio" name="trackMode" value="4" />
+              <span>4</span>
             </label>
           </div>
         </section>
+
+        <section class="mode-section">
+          <span class="section-label">Downsample Factor</span>
+          <select id="downsampleSelect" class="factor-select">
+            <option value="1">Full resolution &nbsp;(44,100 Hz)</option>
+            <option value="2">&divide;2 &nbsp;(22,050 Hz)</option>
+            <option value="4" selected>&divide;4 &nbsp;(11,025 Hz)</option>
+            <option value="8">&divide;8 &nbsp;(5,512 Hz)</option>
+            <option value="16">&divide;16 &nbsp;(2,756 Hz)</option>
+            <option value="32">&divide;32 &nbsp;(1,378 Hz)</option>
+            <option value="64">&divide;64 &nbsp;(689 Hz)</option>
+          </select>
+        </section>
+
+        <div id="demo" class="status-line"></div>
 
         <section class="waveform-section">
           <canvas id="waveform-canvas"></canvas>
@@ -64,22 +82,17 @@
           </div>
           <div id="trackControls" class="track-controls"></div>
           <p class="hint">
-            Drag a fader to isolate a track or blend it back in — hear the
-            original click into place.
+            Drag a fader to isolate a track or blend it back in.
           </p>
         </section>
 
         <section class="export-section">
           <button onclick="saveAllTracks()" class="btn btn-secondary">Save All Tracks as WAV</button>
-          <p class="hint">
-            Import the tracks into a DAW and experiment with muting,
-            panning, and fading.
-          </p>
         </section>
       </main>
 
       <footer class="app-footer">
-        Processing happens locally in your browser — audio never leaves your device.
+        Processing happens locally in your browser &mdash; audio never leaves your device.
       </footer>
     </div>
 

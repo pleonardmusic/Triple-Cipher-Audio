@@ -165,6 +165,32 @@ body {
   align-items: center;
 }
 
+.factor-select {
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.factor-select:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.factor-select:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+.factor-select option {
+  background: var(--panel);
+  color: var(--text);
+}
+
 .segmented {
   display: inline-flex;
   background: rgba(255, 255, 255, 0.06);
@@ -253,7 +279,8 @@ body {
 .track-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  flex-wrap: wrap;
+  gap: 10px 14px;
   padding: 10px 14px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--panel-border);
@@ -271,6 +298,7 @@ body {
 .track-fader {
   --fill: 100%;
   flex: 1;
+  min-width: 90px;
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
@@ -282,6 +310,83 @@ body {
   );
   outline: none;
   cursor: pointer;
+}
+
+.value-readout {
+  min-width: 34px;
+  font-size: 0.8em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.mute-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 0.75em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.mute-btn:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  color: var(--text);
+}
+
+.mute-btn.active {
+  background: #f87171;
+  border-color: #f87171;
+  color: #1a0a0a;
+}
+
+.knob {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #2a2f3d, #14171f 70%);
+  border: 1px solid var(--panel-border);
+  position: relative;
+  cursor: ns-resize;
+  touch-action: none;
+  user-select: none;
+}
+
+.knob:hover,
+.knob.dragging {
+  border-color: var(--track-color, var(--accent));
+}
+
+.knob:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+.knob-indicator {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--knob-angle, 0deg));
+  pointer-events: none;
+}
+
+.knob-indicator::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 3px;
+  height: 10px;
+  background: var(--track-color, var(--accent));
+  border-radius: 2px;
+  transform: translateX(-50%);
 }
 
 .track-fader::-webkit-slider-thumb {
